@@ -9,7 +9,7 @@ BUILD_DIR=${GOPATH}/src/github.com/${GITHUB_USERNAME}/${BINARY}
 PKG_LIST=$$(go list ./... | grep -v /vendor/)
 # Setup the -ldflags option for go build here, interpolate the variable values
 LDFLAGS = -ldflags "-X main.VERSION=${VERSION} -X main.COMMIT=${COMMIT} -X main.BRANCH=${BRANCH} -X main.GOVERSION=${GOVERSION}"
-
+# Noothing. 
 # Build the project
 all: build
 
