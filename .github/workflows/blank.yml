@@ -1,6 +1,15 @@
 name: CI
 
-on: [push]
+on: 
+    # Publish `master` as Docker `latest` image.
+    branches:
+      - master
+
+    # Publish `v1.2.3` tags as releases.
+    tags:
+      - v*
+env:
+  IMAGE_NAME: kubez
 
 jobs:
  # build:
@@ -13,6 +22,7 @@ jobs:
    #   run: echo '${{ secrets.DOCKER_HUB }}' | docker login --username middlewaregruppen --password-stdin
    # - name: Run a one-line script
    #   run: make
+      
  
   push:
     runs-on: ubuntu-latest
