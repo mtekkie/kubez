@@ -34,17 +34,16 @@ frontend:
 linux: dep
 	CGO_ENABLED=0 GOOS=linux GOARCH=${GOARCH} go build ${LDFLAGS} -o out/kubez cmd/kubez/main.go
 	CGO_ENABLED=0 GOOS=linux GOARCH=${GOARCH} go build ${LDFLAGS} -o out/loader cmd/loader/main.go
-	CGO_ENABLED=0 GOOS=linux GOARCH=${GOARCH} go build ${LDFLAGS} -o out/api-endpoint cmd/api-endpoint/main.go
 
 
 docker_build: linux
 	#docker run --rm -v "${PWD}":/go/src/github.com/${GITHUB_USERNAME}/${BINARY}  -w /go/src/github.com/${GITHUB_USERNAME}/${BINARY}  make fmt test
-	docker build -t docker.io/${GITHUB_USERNAME}/${BINARY}:${VERSION} .
-	docker tag docker.io/${GITHUB_USERNAME}/${BINARY}:${VERSION}  docker.io/${GITHUB_USERNAME}/${BINARY}:latest
+	docker build -t ${GITHUB_USERNAME}/${BINARY}:${VERSION} .
+	docker tag ${GITHUB_USERNAME}/${BINARY}:${VERSION}  docker.io/${GITHUB_USERNAME}/${BINARY}:latest
 
 docker_push:
-	docker push docker.io/${GITHUB_USERNAME}/${BINARY}:${VERSION}
-	docker push docker.io/${GITHUB_USERNAME}/${BINARY}:latest
+	docker push ${GITHUB_USERNAME}/${BINARY}:${VERSION}
+	docker push ${GITHUB_USERNAME}/${BINARY}:latest
 
 docker: docker_build docker_push
 
