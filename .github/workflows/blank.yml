@@ -38,5 +38,5 @@ jobs:
           [ "$VERSION" == "master" ] && VERSION=latest
           echo IMAGE_ID=$IMAGE_ID
           echo VERSION=$VERSION
-          docker tag kubez $IMAGE_ID:$VERSION
+          docker tag middlewaregruppen/kubez $IMAGE_ID:$VERSION
           docker push $IMAGE_ID:$VERSION
