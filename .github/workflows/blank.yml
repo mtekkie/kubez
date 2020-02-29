@@ -3,14 +3,40 @@ name: CI
 on: [push]
 
 jobs:
-  build:
+ # build:
 
+  #  runs-on: ubuntu-latest
+
+   # steps:
+   # - uses: actions/checkout@v2
+   # - name: Docker login
+   #   run: echo '${{ secrets.DOCKER_HUB }}' | docker login --username middlewaregruppen --password-stdin
+   # - name: Run a one-line script
+   #   run: make
+ 
+  push:
     runs-on: ubuntu-latest
+    if: github.event_name == 'push'
 
     steps:
-    - uses: actions/checkout@v2
-    - name: Docker login
-      run: echo '${{ secrets.DOCKER_HUB }}' | docker login --username middlewaregruppen --password-stdin
-    - name: Run a one-line script
-      run: make
- 
+      - uses: actions/checkout@v2
+
+      - name: Build image
+        run: make
+
+      - name: Log into registry
+        run: echo "${{ secrets.GITHUB_TOKEN }}" | docker login docker.pkg.github.com -u ${{ github.actor }} --password-stdin
+
+      - name: Push image
+        run: |
+          IMAGE_ID=docker.pkg.github.com/${{ github.repository }}/$IMAGE_NAME
+          # Strip git ref prefix from version
+          VERSION=$(echo "${{ github.ref }}" | sed -e 's,.*/\(.*\),\1,')
+          # Strip "v" prefix from tag name
+          [[ "${{ github.ref }}" == "refs/tags/"* ]] && VERSION=$(echo $VERSION | sed -e 's/^v//')
+          # Use Docker `latest` tag convention
+          [ "$VERSION" == "master" ] && VERSION=latest
+          echo IMAGE_ID=$IMAGE_ID
+          echo VERSION=$VERSION
+          docker tag kubez $IMAGE_ID:$VERSION
+          docker push $IMAGE_ID:$VERSION
