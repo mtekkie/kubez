@@ -9,6 +9,8 @@ jobs:
 
     steps:
     - uses: actions/checkout@v2
+    - name: Docker login
+      run: echo '${{ secrets.DOCKER_HUB }}' | docker login --username middlewaregruppen --password-stdin
     - name: Run a one-line script
       run: make
  
