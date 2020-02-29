@@ -9,7 +9,7 @@ BUILD_DIR=${GOPATH}/src/github.com/${GITHUB_USERNAME}/${BINARY}
 PKG_LIST=$$(go list ./... | grep -v /vendor/)
 # Setup the -ldflags option for go build here, interpolate the variable values
 LDFLAGS = -ldflags "-X main.VERSION=${VERSION} -X main.COMMIT=${COMMIT} -X main.BRANCH=${BRANCH} -X main.GOVERSION=${GOVERSION}"
-# Noothing. 
+
 # Build the project
 all: build
 
@@ -38,12 +38,12 @@ linux: dep
 
 docker_build: linux
 	#docker run --rm -v "${PWD}":/go/src/github.com/${GITHUB_USERNAME}/${BINARY}  -w /go/src/github.com/${GITHUB_USERNAME}/${BINARY}  make fmt test
-	docker build -t docker.io/${GITHUB_USERNAME}/${BINARY}:${VERSION} .
-	docker tag docker.io/${GITHUB_USERNAME}/${BINARY}:${VERSION}  docker.io/${GITHUB_USERNAME}/${BINARY}:latest
+	docker build -t ${GITHUB_USERNAME}/${BINARY}:${VERSION} .
+	docker tag ${GITHUB_USERNAME}/${BINARY}:${VERSION}  docker.io/${GITHUB_USERNAME}/${BINARY}:latest
 
 docker_push:
-	docker push docker.io/${GITHUB_USERNAME}/${BINARY}:${VERSION}
-	docker push docker.io/${GITHUB_USERNAME}/${BINARY}:latest
+	docker push ${GITHUB_USERNAME}/${BINARY}:${VERSION}
+	docker push ${GITHUB_USERNAME}/${BINARY}:latest
 
 docker: docker_build docker_push
 
